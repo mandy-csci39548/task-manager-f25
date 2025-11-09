@@ -1,14 +1,7 @@
 import { useState } from 'react'
 import EditDescription from './EditDescription'
 import { useTaskContext } from './TaskContext'
-import {
-  Paper,
-  Checkbox,
-  Typography,
-  IconButton,
-  Stack,
-  Box,
-} from '@mui/material'
+import { Checkbox, Typography, IconButton, Stack, Box } from '@mui/material'
 import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material'
 
 function Task({ description = '', completed = false, index }) {

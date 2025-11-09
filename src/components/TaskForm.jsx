@@ -47,14 +47,14 @@ function TaskForm() {
           inputRef={inputRef}
           onChange={(e) => setDescription(e.target.value)}
           fullWidth
-          size='small' // ⬅ makes input smaller
+          size='small'
         />
 
         <Button
           type='submit'
           variant='contained'
           color='primary'
-          size='small' // ⬅ smaller button
+          size='small'
           sx={{
             px: 2,
             py: 0.8,
