@@ -1,45 +1,109 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Box, Paper, Typography, Chip, CircularProgress } from '@mui/material'
 
 function TaskDetailPage() {
-  // useParams from React router to get the id from the url
   const { id } = useParams()
-
-  // Create a state to store the task we want to display
   const [task, setTask] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  // This useEffect hook runs on mount
-  // Fetches our API to get the data about this single task
   useEffect(() => {
     getTask()
   }, [])
 
   async function getTask() {
     try {
-      // API CALL
-      const response = await axios.get(
-        `https://68ebf9e7eff9ad3b14010278.mockapi.io/api/tasks/${id}`
-      )
-      // destruct data
-      const { data } = response
-      // set the state to the task we got back
-      setTask(data)
+      const response = await axios.get(`http://localhost:8000/tasks/${id}`)
+      setTask(response.data)
     } catch (error) {
-      // in the case of an error, console.error it, and reset task to null
       console.error(error)
       setTask(null)
+    } finally {
+      setLoading(false)
     }
   }
 
-  if (!task) return null
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '60vh',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
+
+  if (!task)
+    return (
+      <Typography
+        variant='h6'
+        align='center'
+        color='text.secondary'
+        sx={{ mt: 4 }}
+      >
+        Task not found.
+      </Typography>
+    )
 
   return (
-    <div>
-      <h1>Task Detail</h1>
-      <p>Description: {task.description}</p>
-      <p>Completed: {task.completed ? 'Yes' : 'No'} </p>
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        mt: 6,
+        px: 2,
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          maxWidth: 400,
+          width: '100%',
+          borderRadius: 3,
+          bgcolor: 'background.paper',
+        }}
+      >
+        <Typography
+          variant='h5'
+          fontWeight={600}
+          gutterBottom
+          textAlign='center'
+        >
+          Task Detail
+        </Typography>
+
+        <Typography variant='body1' sx={{ mb: 2 }}>
+          <strong>Description:</strong> {task.description}
+        </Typography>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 2,
+          }}
+        >
+          <Chip
+            label={task.completed ? 'Completed' : 'Not Completed'}
+            color={task.completed ? 'success' : 'warning'}
+            variant='outlined'
+            sx={{
+              fontWeight: 600,
+              fontSize: '0.9rem',
+              px: 2,
+              py: 0.5,
+            }}
+          />
+        </Box>
+      </Paper>
+    </Box>
   )
 }
+
 export default TaskDetailPage

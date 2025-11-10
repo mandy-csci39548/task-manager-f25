@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-function EditDescription({ index, description, onEdit, onCancel }) {
+function EditDescription({ id, index, description, onEdit, onCancel }) {
   const [descriptionField, setDescriptionField] = useState(description)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onEdit(index, descriptionField)
+    onEdit(id, descriptionField)
   }
 
   const handleCancel = (e) => {

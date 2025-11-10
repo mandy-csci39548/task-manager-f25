@@ -2,14 +2,20 @@ import { useState } from 'react'
 import EditDescription from './EditDescription'
 import { useTaskContext } from './TaskContext'
 import { Checkbox, Typography, IconButton, Stack, Box } from '@mui/material'
-import { Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material'
+import {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Visibility as EyeIcon,
+} from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom'
 
-function Task({ description = '', completed = false, index }) {
+function Task({ id, description = '', completed = false, index }) {
+  const navigate = useNavigate()
   const [editing, setEditing] = useState(false)
   const { deleteTask, updateCompleted, updateDescription } = useTaskContext()
 
-  const handleEdit = (index, newDescription) => {
-    updateDescription(index, newDescription)
+  const handleEdit = (id, newDescription) => {
+    updateDescription(id, newDescription)
     setEditing(false)
   }
 
@@ -18,8 +24,12 @@ function Task({ description = '', completed = false, index }) {
   }
 
   const handleDelete = () => {
-    deleteTask(index)
+    deleteTask(id)
     setEditing(false)
+  }
+
+  const handleView = () => {
+    navigate(`/tasks/${id}`)
   }
 
   return (
@@ -43,6 +53,7 @@ function Task({ description = '', completed = false, index }) {
         {editing ? (
           <EditDescription
             index={index}
+            id={id}
             description={description}
             onEdit={handleEdit}
             onCancel={handleCancelEdit}
@@ -74,6 +85,10 @@ function Task({ description = '', completed = false, index }) {
 
         <IconButton color='error' size='small' onClick={handleDelete}>
           <DeleteIcon />
+        </IconButton>
+
+        <IconButton size='small' onClick={handleView}>
+          <EyeIcon />
         </IconButton>
       </Stack>
     </Box>
