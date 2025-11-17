@@ -2,6 +2,8 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import AssignmentTwoToneIcon from '@mui/icons-material/AssignmentTwoTone'
 import { Link } from 'react-router-dom'
 import bgImage from '../assets/background.jpg'
+import RegisterForm from '../components/RegisterForm'
+import { LoginForm } from '../components'
 
 function HomePage() {
   return (
@@ -19,8 +21,8 @@ function HomePage() {
           </Typography>
         </Stack>
 
-        <Stack marginY={10} spacing={2}>
-          <Typography variant='h3'>
+        <Stack marginY={4} spacing={2}>
+          <Typography variant='h4'>
             Welcome to my <br />
             Task Manager Project!
           </Typography>
@@ -29,9 +31,7 @@ function HomePage() {
           </Typography>
         </Stack>
 
-        <Button size='large' variant='contained' component={Link} to='/tasks'>
-          See my tasks
-        </Button>
+        <LoginForm />
       </Box>
 
       <Box

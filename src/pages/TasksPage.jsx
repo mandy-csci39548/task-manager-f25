@@ -24,7 +24,12 @@ function TasksPage() {
 
   async function getTasks() {
     try {
-      const response = await axios.get('http://localhost:8000/tasks')
+      const token = localStorage.getItem('token')
+      const response = await axios.get('http://localhost:8000/tasks', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
       const { data } = response
 
@@ -39,8 +44,13 @@ function TasksPage() {
   async function deleteTask(id) {
     // dispatch(actions.deleteTask(index))
     try {
-      await axios.delete(`http://localhost:8000/tasks/${id}`)
-      await getTasks()
+      const token = localStorage.getItem('token')
+      await axios.delete(`http://localhost:8000/tasks/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      getTasks()
       showAlert('Task successfully deleted!', 'success')
     } catch (error) {
       console.error('Error deleting task:', error)
@@ -50,11 +60,20 @@ function TasksPage() {
 
   async function addTask(description) {
     // dispatch(actions.addTask(description))
+    const token = localStorage.getItem('token')
     try {
-      await axios.post(`http://localhost:8000/tasks`, {
-        description,
-        completed: false,
-      })
+      await axios.post(
+        `http://localhost:8000/tasks`,
+        {
+          description,
+          completed: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       showAlert('Created new task!')
       getTasks()
     } catch (error) {
@@ -64,12 +83,17 @@ function TasksPage() {
 
   async function updateTaskField(id, field, value) {
     // dispatch(actions.updateTask({ index, field, value }))
+    const token = localStorage.getItem('token')
     try {
       const task = taskList.find((t) => t.id === id)
       if (!task) return
       const updatedTask = { ...task, [field]: value }
 
-      await axios.put(`http://localhost:8000/tasks/${id}`, updatedTask)
+      await axios.put(`http://localhost:8000/tasks/${id}`, updatedTask, {
+        headers: {
+          Authorization: `Bearer ${token}`, // attach token
+        },
+      })
       await getTasks()
       showAlert('Task successfully updated!', 'success')
     } catch (error) {
